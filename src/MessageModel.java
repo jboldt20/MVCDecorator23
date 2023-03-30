@@ -1,7 +1,6 @@
 public class MessageModel {
-
-    private String base;
     private Message m;
+    private Message dm;
     private boolean angry;
     private boolean sms;
     private boolean binary;
@@ -10,13 +9,10 @@ public class MessageModel {
     public static final int ANGRY = 1;
     public static final int BINARY = 2;
     public static final int SMS = 3;
-    public static final int ENCRYPTED  = 4;
-
+    public static final int ENCRYPTED = 4;
 
     public MessageModel() {
-        base = "";
-        m = new Message(base);
-
+        m = new Message("Hello");
         angry = false;
         sms = false;
         binary = false;
@@ -24,32 +20,32 @@ public class MessageModel {
     }
 
     public String getMessage() {
-        m = new Message (base);
+        Message dm = new Message(m.getTheMsg());
         decorate();
-        return m.getTheMsg();
+        return dm.getTheMsg();
     }
 
     public void setMessage(String s) {
-        base = s;
+        m = new Message(s);
+        //decorate();
     }
-
-    private void decorate(){
+    private void decorate() {
 
         if (angry){
-            m = new AngryMessageDecorator(m);
+            dm = new AngryMessageDecorator(dm);
         }
         if (sms){
-            m = new SMSDecorator(m);
-        }
-        if (encrypted){
-            m = new EncryptedMessage(m,5);
+            dm = new SMSDecorator(dm);
         }
         if (binary){
-            m = new BinaryMessage(m);
+            dm = new BinaryMessage(dm);
+        }
+        if (encrypted){
+            dm = new EncryptedMessage(dm, 5);
         }
     }
     public void toggle(int state){
-        switch (state){
+        switch (state) {
             case ANGRY:
                 angry = !angry;
                 break;
@@ -63,6 +59,5 @@ public class MessageModel {
                 encrypted = !encrypted;
                 break;
         }
-
     }
 }
